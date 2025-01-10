@@ -59,7 +59,7 @@ The goal of this project was to analyze a supply chain dataset to gain insights 
   - Relationships were modeled using a **snowflake schema**, linking fact and dimension tables.  
   - A new table called `Color Theme` was created to enable **dark/night mode switching**. 
  
-## Snowflake Model with color theme table: ![image](https://github.com/user-attachments/assets/203b9940-293f-44c0-8991-b5906ecf7448)
+- **Snowflake Model with color theme table**: ![image](https://github.com/user-attachments/assets/203b9940-293f-44c0-8991-b5906ecf7448)
 
 ---
 
