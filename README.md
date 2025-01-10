@@ -54,18 +54,18 @@ The goal of this project was to analyze a supply chain dataset to gain insights 
 **Codes**
  
  ``` Python
--- Libs
+-- #Libs
 import pandas as pd
 import numpy as np
 import scipy as sp
 
--- Dataset import
+-- #Dataset import
 Supply_chain = pd.read_csv(r'C:\Users\HomePC\Desktop\InspectedDataCoSupplyChainDataset.csv', encoding = 'latin1')
 
---checking Na
+-- #Checking Na
 print(supply_chain.isna().any().any())
 
--- checking empty cells
+-- #Checking empty cells
 # Check which columns have empty cells
 print(supply_chain.isna().any())
 # Count empty cells for each column
@@ -74,7 +74,7 @@ print(supply_chain.isna().sum())
 # Total number of empty cells in the entire DataFrame
 print(supply_chain.isna().sum().sum())
 
--- filling non numeric empty cells
+-- #filling non numeric empty cells
 # Fill non-numeric empty values with "Unknown"
 supply_chain.fillna(value={col: "Unknown" for col in supply_chain.select_dtypes(include='object').columns}, inplace=True)
 
