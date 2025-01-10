@@ -342,4 +342,4 @@ DIVIDE(
 ```
 
 ## References
-- **Kaggle**: [Supply Chain Dataset]([https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis?select=DataCoSupplyChainDataset.csv])  
+- **Kaggle**: [Supply Chain Dataset](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis?select=DataCoSupplyChainDataset.csv)  
