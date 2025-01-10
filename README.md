@@ -51,12 +51,168 @@ The goal of this project was to analyze a supply chain dataset to gain insights 
     - `dim_order_date`
     - `dim_shipping_date`  
   - Each table was exported as a CSV file for further processing.  
+**Codes**
+ 
+ ``` Python
+-- Libs
+import pandas as pd
+import numpy as np
+import scipy as sp
+
+-- Dataset import
+Supply_chain = pd.read_csv(r'C:\Users\HomePC\Desktop\InspectedDataCoSupplyChainDataset.csv', encoding = 'latin1')
+
+--checking Na
+print(supply_chain.isna().any().any())
+
+-- checking empty cells
+# Check which columns have empty cells
+print(supply_chain.isna().any())
+# Count empty cells for each column
+print(supply_chain.isna().sum())
+
+# Total number of empty cells in the entire DataFrame
+print(supply_chain.isna().sum().sum())
+
+-- filling non numeric empty cells
+# Fill non-numeric empty values with "Unknown"
+supply_chain.fillna(value={col: "Unknown" for col in supply_chain.select_dtypes(include='object').columns}, inplace=True)
+
+# Converting order_date and shipping_date columns to datetime
+supply_chain['order_date'] = pd.to_datetime(supply_chain['order date (DateOrders)'], errors='coerce')
+supply_chain['shipping_date'] = pd.to_datetime(supply_chain['shipping date (DateOrders)'], errors='coerce')
+
+# Extracting Year, Month, Day Name for both dates
+for date_col in ['order_date', 'shipping_date']:
+    supply_chain[f'{date_col}_year'] = supply_chain[date_col].dt.year
+    supply_chain[f'{date_col}_month'] = supply_chain[date_col].dt.month
+    supply_chain[f'{date_col}_day_name'] = supply_chain[date_col].dt.day_name()
+
+# Calculate Order Item Subtotal
+supply_chain['order_item_subtotal'] = supply_chain['Order Item Quantity'] * supply_chain['Order Item Product Price']
+
+# Calculate Profit (Placeholder logic: Sales - Total Discounts)
+supply_chain['profit'] = supply_chain['Sales'] - supply_chain['Order Item Discount']
+
+# Shipping Cost: Placeholder (adjust if there’s specific logic)
+supply_chain['shipping_cost'] = supply_chain['Order Item Total'] * 0.05  # Assuming 5% of the total is the shipping cost.
+
+# View the updated DataFrame
+supply_chain.head()
+
+supply_chain
+
+-- Splitting tables
+# fact table
+fact_table = supply_chain[[
+    'Order Id', 'Order Item Id', 'Customer Id', 'Product Card Id', 'Department Id', 'Order Item Quantity', 'Order Item Product Price', 
+    'order_item_subtotal', 'Order Item Discount', 'Order Item Total', 
+    'Sales', 'profit', 'shipping_cost', 'order_date', 'shipping_date', 'Payment_Type', 'Days for shipment (scheduled)', 'Days for shipping (real)', 'Late_delivery_risk (boolean)'
+]]
+
+# customer table
+dim_customer = supply_chain[[
+    'Customer Id', 'Customer Fname', 'Customer Lname', 
+    'Customer Segment','Customer Street', 'Customer Zipcode', 'Customer City', 'Customer State', 'Customer Country'
+]].drop_duplicates()
+
+# product table
+dim_product = supply_chain[[
+    'Product Card Id', 'Product Name', 'Product Price', 
+    'Product Status', 'Product Category Id', 'Department Id'
+]].drop_duplicates()
+
+# category table
+dim_category = supply_chain[[
+    'Category Id', 'Category Name'
+]].drop_duplicates()
+
+#department table
+dim_department = supply_chain[[
+    'Department Id', 'Department Name'
+]].drop_duplicates()
+
+#order table 
+dim_order = supply_chain[[
+    'Order Id', 'Order Customer Id', 'Order Status', 
+    'Order City', 'Order Country', 'Market (continent)'
+]].drop_duplicates()
+
+#order item table
+dim_order_item = supply_chain[[
+    'Order Item Id', 'Order Item Product Price', 'Order Item Profit Ratio', 'Order Item Quantity', 
+    'order_item_subtotal', 'Order Item Discount', 'Order Item Total'
+]].drop_duplicates()
+
+# shipping date table
+dim_shipping_date = supply_chain[[
+    'shipping_date', 'shipping_date_year', 'shipping_date_month', 'shipping_date_day_name'
+]].drop_duplicates()
+
+# order date table
+dim_order_date = supply_chain[[
+    'order_date', 'order_date_year', 'order_date_month', 'order_date_day_name'
+]].drop_duplicates()
+
+# Check if linked ID columns contain the same or overlapping values
+linked_columns = [
+    ("Order Customer Id", "Customer Id"),
+    ("Order Item Cardprod Id", "Product Card Id"),
+    ("Product Category Id", "Category Id"),
+]
+
+# Verifying overlaps in values for each pair
+overlap_results = {
+    f"{col1} vs {col2}": supply_chain[col1].isin(supply_chain[col2]).all()
+    for col1, col2 in linked_columns
+}
+
+# Print results
+print(overlap_results)
+
+-- Exportin CSVs
+# Save tables as separate CSV files (optional)
+fact_table.to_csv("fact_table.csv", index=False)
+dim_customer.to_csv("dim_customer.csv", index=False)
+dim_product.to_csv("dim_product.csv", index=False)
+dim_category.to_csv("dim_category.csv", index=False)
+dim_department.to_csv("dim_department.csv", index=False)
+dim_order.to_csv("dim_order.csv", index=False)
+dim_order_item.to_csv("dim_order_item.csv", index=False)
+dim_shipping_date.to_csv("dim_shipping_date.csv", index=False)
+dim_order_date.to_csv("dim_order_date.csv", index=False)
+
+```
 
 - **Power BI**:  
   - Additional cleaning was performed, such as renaming columns with snake_case to a more readable format.  
   - Relationships were modeled using a **snowflake schema**, linking fact and dimension tables.  
   - A new table called `Color Theme` was created to enable **dark/night mode switching**.  
 
+## Dax Functions:
+``` DAX
+Total Profit = SUM(fact_table[Profit])
+```
+```
+Total Sales = SUM(fact_table[Sales])
+```
+```
+Total Sales Volume = SUM(fact_table[Order Item Quantity])
+```
+```
+Average Shipping Cost = AVERAGEX(fact_table, fact_table[shipping cost])
+```
+```
+Average Shipping Time = AVERAGE(fact_table[Shipment day (real)])
+```
+```
+YoY % = 
+DIVIDE(
+    [_SelectedYearSales] - [_LastYearSales],
+    [_LastYearSales],
+    0
+)
+```
 ---
 
 ## Analysis
