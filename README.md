@@ -233,7 +233,7 @@ supply_chain.head()
 
 supply_chain
 
--- Splitting tables
+-- #Splitting tables
 # fact table
 fact_table = supply_chain[[
     'Order Id', 'Order Item Id', 'Customer Id', 'Product Card Id', 'Department Id', 'Order Item Quantity', 'Order Item Product Price', 
@@ -301,7 +301,7 @@ overlap_results = {
 # Print results
 print(overlap_results)
 
--- Exportin CSVs
+-- #Exportin CSVs
 # Save tables as separate CSV files (optional)
 fact_table.to_csv("fact_table.csv", index=False)
 dim_customer.to_csv("dim_customer.csv", index=False)
