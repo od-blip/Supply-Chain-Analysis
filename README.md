@@ -302,7 +302,7 @@ overlap_results = {
 print(overlap_results)
 
 -- #Exportin CSVs
-# Save tables as separate CSV files (optional)
+# Save tables as separate CSV files
 fact_table.to_csv("fact_table.csv", index=False)
 dim_customer.to_csv("dim_customer.csv", index=False)
 dim_product.to_csv("dim_product.csv", index=False)
