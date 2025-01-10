@@ -135,9 +135,9 @@ The goal of this project was to analyze a supply chain dataset to gain insights 
 
 ### Cumulative Product Sales
 - **Top 3 Products in Europe**:  
-  - Lawn Mowers: **18.82% (258K)**  
-  - Summer Dresses: **29.06% (140K)**  
-  - Smartwatches: **37% (117K)**  
+  - Lawn Mowers: **18.82% ($258K)**  
+  - Summer Dresses: **29.06% ($140K)**  
+  - Smartwatches: **37% ($117K)**  
 
 - **Overall Top Product**:  
   - Adidas F10 Messi TRX FG Soccer Cleats  
