@@ -57,7 +57,7 @@ The goal of this project was to analyze a supply chain dataset to gain insights 
 - **Power BI**:  
   - Additional cleaning was performed, such as renaming columns with snake_case to a more readable format.  
   - Relationships were modeled using a **snowflake schema**, linking fact and dimension tables.  
-  - A new table called `Color Theme` was created to enable **dark/night mode switching**. 
+  - A new table called `Color Theme` was created to enable **dark/light mode switching**. 
  
 - **Snowflake Model with color theme table**: ![image](https://github.com/user-attachments/assets/203b9940-293f-44c0-8991-b5906ecf7448)
 
